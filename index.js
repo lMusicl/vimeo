@@ -16,7 +16,7 @@ const generateRandomUA = () => {
     const randomUAIndex = Math.floor(Math.random() * userAgents.length);
     console.log('Random Agent Selection')
     if (!randomUAIndex) {
-        throw new Error("UA generate false!")
+        throw new Error("UA generate false!");
     } else {
         // Return a random user agent using the index above
         return userAgents[randomUAIndex];
@@ -42,6 +42,7 @@ async function loginToVimeo(username, password) {
     try {
         console.log("Attempt to connect to the site Vimeo.com")
         await page.goto('https://vimeo.com/');
+        await page.waitForNavigation();
         console.log("Visited vimeo.com");
     } catch (e) {
         throw new Error('Couldn\'t connect to the site Vimeo.com');
@@ -86,8 +87,14 @@ async function loginToVimeo(username, password) {
 
 
 async function getLastVideo(page) {
-    await page.goto('https://vimeo.com/manage/folders/5053677');
-    console.log('Visited page folder');
+    try {
+        await page.goto('https://vimeo.com/manage/folders/5053677');
+        await page.waitForNavigation();
+        console.log('Visited page folder');
+    } catch (e) {
+        throw new Error("Folder page visit is error");
+    }
+
     console.log("Waiting video list");
     await page.locator('.video_manager__table_item:first-child').wait();
     console.log("Video list visible");
@@ -100,16 +107,22 @@ async function getLastVideo(page) {
             privacy: videoElement.querySelector('.video_manager__table_cell--privacy').innerText
         };
     });
-    console.log("Get video item link and title")
-    return lastVideo;
+    console.log("Get video item link, title and privacy")
+    if (!lastVideo) {
+        throw new Error("Get video item content error")
+    } else {
+        return lastVideo;
+    }
 }
 
-async function changePrivacySettings(page, lastVideo) {
+async function changePrivacySettings(page, lastVideo, browser) {
     console.log('Privacy function started');
     if (lastVideo.privacy === 'Hidden') {
         console.log("The privacy policy settings for this video are correct");
+        await browser.close();
         return false;
     }
+
     await page.goto('https://vimeo.com/manage/videos/' + lastVideo.url);
     console.log('Visited video setting page');
     await page.waitForNavigation();
@@ -144,6 +157,7 @@ async function changePrivacySettings(page, lastVideo) {
 
     await page.waitForNavigation();
     console.log('The privacy policy settings for video "' + lastVideo.title + '" have been successfully changed.');
+    await browser.close();
     return false;
 }
 
@@ -151,13 +165,12 @@ async function main() {
     try {
         const {browser, page} = await loginToVimeo(process.env.MY_USERNAME, process.env.MY_PASSWORD);
         const lastVideo = await getLastVideo(page);
+        console.log("Logged video information");
         console.log('Last video:', lastVideo);
-        console.log("Logged video information")
-        await changePrivacySettings(page, lastVideo);
-        await browser.close();
+        await changePrivacySettings(page, lastVideo, browser);
     } catch (e) {
         ErrorsCount += 1;
-        if (ErrorsCount > 10) {
+        if (ErrorsCount > 4) {
             console.log(e.message);
             console.log("The number of attempts exceeded");
             return false;
