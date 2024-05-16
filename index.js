@@ -116,17 +116,17 @@ async function changePrivacySettings(page, lastVideo) {
 }
 
 async function main() {
-    try {
+    // try {
         const {browser, page} = await loginToVimeo(process.env.MY_USERNAME, process.env.MY_PASSWORD);
         const lastVideo = await getLastVideo(page);
         console.log('Last video:', lastVideo);
         console.log("Logged video information")
         await changePrivacySettings(page, lastVideo);
         await browser.close();
-    } catch (e) {
-        console.log("Something went wrong. Let's try again!")
-        await main();
-    }
+    // } catch (e) {
+    //     console.log("Something went wrong. Let's try again!")
+    //     await main();
+    // }
 }
 
 main();
