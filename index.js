@@ -145,7 +145,7 @@ async function changePrivacySettings(page, lastVideo, browser) {
 
     try {
         await page.locator('#privacy-link-option-disable').wait();
-        console.log("Wait Hide from Vimeo visible");
+        console.log("Button Hide from Vimeo visible");
     } catch (e) {
         throw new Error("Error loading privacy settings");
     }
