@@ -4,6 +4,7 @@ async function loginToVimeo(username, password) {
     const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox']});
     console.log("Open browser");
 
+
     const page = await browser.newPage();
     console.log("Create new page");
 
