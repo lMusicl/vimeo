@@ -4,9 +4,12 @@ async function loginToVimeo(username, password) {
     const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox']});
     console.log("Open browser");
 
-
     const page = await browser.newPage();
     console.log("Create new page");
+
+    const customUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36';
+    await page.setUserAgent(customUA);
+    console.log("Set user agent");
 
     try {
         console.log("Attempt to connect to the site Vimeo.com")
