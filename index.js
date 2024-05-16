@@ -1,5 +1,28 @@
 const puppeteer = require('puppeteer');
 
+let ErrorsCount = 0;
+const generateRandomUA = () => {
+    // Array of random user agents
+    const userAgents = [
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Vivaldi/6.6.3271.50',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Vivaldi/6.6.3271.50',
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Vivaldi/6.6.3271.50',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 OPR/108.0.0.0',
+        'Mozilla/5.0 (Windows NT 10.0; WOW64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 OPR/108.0.0.0'
+    ];
+    // Get a random index based on the length of the user agents array
+    const randomUAIndex = Math.floor(Math.random() * userAgents.length);
+    console.log('Random Agent Selection')
+    if (!randomUAIndex) {
+        throw new Error("UA generate false!")
+    } else {
+        // Return a random user agent using the index above
+        return userAgents[randomUAIndex];
+    }
+}
+
 async function loginToVimeo(username, password) {
     const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox']});
     console.log("Open browser");
@@ -7,9 +30,14 @@ async function loginToVimeo(username, password) {
     const page = await browser.newPage();
     console.log("Create new page");
 
-    const customUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36';
-    await page.setUserAgent(customUA);
-    console.log("Set user agent");
+    try {
+        const customUA = generateRandomUA();
+        await page.setUserAgent(customUA);
+        console.log("Set user agent");
+    } catch (e) {
+        throw new Error("Error user agent selection");
+    }
+
 
     try {
         console.log("Attempt to connect to the site Vimeo.com")
@@ -128,8 +156,16 @@ async function main() {
         await changePrivacySettings(page, lastVideo);
         await browser.close();
     } catch (e) {
-        console.log("Something went wrong. Let's try again!")
-        await main();
+        ErrorsCount += 1;
+        if (ErrorsCount > 10) {
+            console.log(e.message);
+            console.log("The number of attempts exceeded");
+            return false;
+        } else {
+            console.log("Something went wrong. Let's try again!");
+            console.log("Try: " + ErrorsCount);
+            await main();
+        }
     }
 }
 
