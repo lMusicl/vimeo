@@ -42,7 +42,6 @@ async function loginToVimeo(username, password) {
     try {
         console.log("Attempt to connect to the site Vimeo.com")
         await page.goto('https://vimeo.com/');
-        await page.waitForNavigation();
         console.log("Visited vimeo.com");
     } catch (e) {
         throw new Error('Couldn\'t connect to the site Vimeo.com');
@@ -61,14 +60,14 @@ async function loginToVimeo(username, password) {
     try {
         console.log("Attempt to connect to the login page")
         await page.goto('https://vimeo.com/log_in/');
-        await page.waitForNavigation();
         console.log("Visited vimeo login page");
+        await page.locator('#email_login').wait();
+        console.log("Inputs are visible");
     } catch (e) {
         throw new Error('Couldn\'t connect to the page login');
     }
 
-    await page.locator('#email_login').wait();
-    console.log("Inputs are visible");
+
     await page.locator('#email_login').fill(username);
     console.log("Input email");
     await page.locator('#password_login').fill(password);
@@ -89,15 +88,14 @@ async function loginToVimeo(username, password) {
 async function getLastVideo(page) {
     try {
         await page.goto('https://vimeo.com/manage/folders/5053677');
-        await page.waitForNavigation();
         console.log('Visited page folder');
+        console.log("Waiting video list");
+        await page.locator('.video_manager__table_item:first-child').wait();
+        console.log("Video list visible");
     } catch (e) {
         throw new Error("Folder page visit is error");
     }
 
-    console.log("Waiting video list");
-    await page.locator('.video_manager__table_item:first-child').wait();
-    console.log("Video list visible");
     const lastVideo = await page.evaluate(() => {
         const videoElement = document.querySelector('.video_manager__table_item:first-child');
         console.log("Found first video item")
