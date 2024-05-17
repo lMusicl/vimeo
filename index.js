@@ -28,6 +28,7 @@ async function loginToVimeo(username, password) {
 
     try {
         const customUA = generateRandomUA();
+        console.log("User agent: " + customUA);
         await page.setUserAgent(customUA);
         console.log("Set user agent");
     } catch (e) {
