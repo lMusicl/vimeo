@@ -15,12 +15,8 @@ const generateRandomUA = () => {
     // Get a random index based on the length of the user agents array
     const randomUAIndex = Math.floor(Math.random() * userAgents.length);
     console.log('Random Agent Selection')
-    if (!randomUAIndex) {
-        throw new Error("UA generate false!");
-    } else {
-        // Return a random user agent using the index above
-        return userAgents[randomUAIndex];
-    }
+    // Return a random user agent using the index above
+    return userAgents[randomUAIndex];
 }
 
 async function loginToVimeo(username, password) {
