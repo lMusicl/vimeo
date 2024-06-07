@@ -21,7 +21,7 @@ const generateRandomUA = () => {
 
 async function loginToVimeo(username, password) {
     const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1280,800'],
-        executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
+        // executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
         defaultViewport: {
             width:1280,
             height:800
@@ -196,7 +196,7 @@ async function main() {
         } else {
             console.log("Something went wrong. Let's try again!");
             console.log("Try: " + ErrorsCount);
-            // await browser.close();
+            await browser.close();
             await main();
         }
     }
