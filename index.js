@@ -196,7 +196,7 @@ async function main() {
         } else {
             console.log("Something went wrong. Let's try again!");
             console.log("Try: " + ErrorsCount);
-            await browser.close();
+            // await browser.close();
             await main();
         }
     }
