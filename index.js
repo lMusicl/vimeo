@@ -181,7 +181,7 @@ async function changePrivacySettings(page, lastVideo, browser) {
 
 async function main() {
     try {
-        var {browser, page} = await loginToVimeo(MY_USERNAME, MY_PASSWORD);
+        var {browser, page} = await loginToVimeo(process.env.MY_USERNAME, process.env.MY_PASSWORD);
         const lastVideo = await getLastVideo(page);
         console.log("Logged video information");
         console.log('Last video:', lastVideo);
