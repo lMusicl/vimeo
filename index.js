@@ -39,7 +39,6 @@ async function loginToVimeo(username, password) {
         throw new Error("Error user agent selection");
     }
 
-
     try {
         console.log("Attempt to connect to the site Vimeo.com")
         await page.goto('https://vimeo.com/');
