@@ -67,7 +67,6 @@ async function loginToVimeo(username, password) {
         throw new Error('Couldn\'t connect to the page login');
     }
 
-
     await page.locator('#email_login').fill(username);
     console.log("Input email");
     await page.locator('#password_login').fill(password);
