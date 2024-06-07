@@ -170,12 +170,12 @@ async function changePrivacySettings(page, lastVideo, browser) {
         await page.waitForNavigation();
     } catch (e) {
         console.log('The privacy policy settings for video "' + lastVideo.title + '" have been successfully changed.');
-        await browser.close();
+        // await browser.close();
         process.exit();
     }
 
     console.log('The privacy policy settings for video "' + lastVideo.title + '" have been successfully changed.');
-    await browser.close();
+    // await browser.close();
     process.exit();
 }
 
@@ -196,7 +196,7 @@ async function main() {
         } else {
             console.log("Something went wrong. Let's try again!");
             console.log("Try: " + ErrorsCount);
-            await browser.close();
+            // await browser.close();
             await main();
         }
     }
