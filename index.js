@@ -112,9 +112,9 @@ async function getLastVideo(page) {
         const videoElement = document.querySelector('table tbody tr:first-child');
         console.log("Found first video item")
         return {
-            title: videoElement.querySelector('table tbody tr:first-child td:nth-child(3) span').innerText,
+            title: videoElement.querySelector('table tbody tr:first-child td:nth-child(3) p').innerText,
             // url: videoElement.querySelector('table tbody tr:first-child td:nth-child(2)').getAttribute('href'),
-            privacy: videoElement.querySelector('table tbody tr:first-child td:nth-child(4) span').innerText
+            privacy: videoElement.querySelector('table tbody tr:first-child td:nth-child(4) p').innerText
         };
     });
     console.log("Get video item link, title and privacy")
@@ -195,6 +195,7 @@ async function main() {
             process.exit();
         } else {
             console.log("Something went wrong. Let's try again!");
+            console.log(e.message);
             console.log("Try: " + ErrorsCount);
             // await browser.close();
             await main();
