@@ -135,35 +135,37 @@ async function changePrivacySettings(page, lastVideo, browser) {
 
     // await page.goto('https://vimeo.com/manage/videos/' + lastVideo.url);
     await page.locator('table tbody tr:first-child').click();
-    console.log('Visited video setting page');
     await page.waitForNavigation();
+    console.log('Visited video setting page');
 
     try {
-        await page.locator('#privacy-status-button').wait();
+        await page.locator('#header > div > div > button').wait();
         console.log("The video settings page is loaded");
+        await page.locator('#header > div > div > button').click();
     } catch (e) {
         await page.reload();
         await page.waitForNavigation();
     }
 
     try {
-        await page.locator('#privacy-status-button').wait();
+        await page.locator('.chakra-portal > div:nth-child(3) .chakra-modal__content-container > section .chakra-portal .chakra-menu__menu-button').wait();
         console.log("Policy button visible");
     } catch (e) {
         throw new Error("Error loading the settings page");
     }
 
-    await page.locator('#privacy-status-button').click();
+    await page.locator('.chakra-portal > div:nth-child(3) .chakra-modal__content-container > section .chakra-portal .chakra-menu__menu-button').click();
     console.log("Click Policy button");
 
     try {
-        await page.locator('#privacy-link-option-disable').wait();
+        // await page.locator('#privacy-link-option-disable').wait();
+        await page.locator('.chakra-portal > div:nth-child(3) .chakra-modal__content-container > section .chakra-portal > div > div > div > div .chakra-menu__menu-list button:nth-child(3)').wait();
         console.log("Button Hide from Vimeo visible");
     } catch (e) {
         throw new Error("Error loading privacy settings");
     }
 
-    await page.locator('.chakra-radio:nth-child(3)').click();
+    await page.locator('.chakra-portal > div:nth-child(3) .chakra-modal__content-container > section .chakra-portal > div > div > div > div .chakra-menu__menu-list button:nth-child(3)').click();
     console.log("Click Hide from Vimeo button");
 
     try {
@@ -181,6 +183,7 @@ async function changePrivacySettings(page, lastVideo, browser) {
 
 async function main() {
     try {
+        // process.env.MY_USERNAME, process.env.MY_PASSWORD
         var {browser, page} = await loginToVimeo(process.env.MY_USERNAME, process.env.MY_PASSWORD);
         const lastVideo = await getLastVideo(page);
         console.log("Logged video information");
