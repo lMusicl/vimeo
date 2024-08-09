@@ -72,6 +72,7 @@ async function loginToVimeo(username, password) {
     await page.locator('#password_login').fill(password);
     console.log("Input password");
 
+
     try {
         console.log("Authorization attempt")
         await page.locator('#__next > div.naniiu-0.hidfuh > div > div.sc-1hmcdc6-0.biAalf.f2pJoinLoginScreen > div > section > section:nth-child(5) > form > section:nth-child(4) > button').click();
