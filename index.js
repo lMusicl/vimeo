@@ -20,8 +20,8 @@ const generateRandomUA = () => {
 }
 
 async function loginToVimeo(username, password) {
-    const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1280,800'],
-        // executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
+    const browser = await puppeteer.launch({headless: false, args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1280,800'],
+        executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
         defaultViewport: {
             width:1280,
             height:800
@@ -141,26 +141,27 @@ async function changePrivacySettings(page, lastVideo, browser) {
     console.log('Visited video setting page');
 
     try {
-        await page.locator('#header > div > div > button').wait();
-        console.log("The video settings page is loaded");
-        await page.locator('#header > div > div > button').click();
+        await page.locator('#header > div:nth-child(2) > div:nth-child(3) > button:first-child').wait();
+        await page.locator('#header > div:nth-child(2) > div:nth-child(3) > button:first-child').click();
+        console.log("Clicked on setting button");
     } catch (e) {
         await page.reload();
         await page.waitForNavigation();
+        console.log("The video settings page is loaded");
     }
+
 
     try {
         await page.locator('.chakra-portal > div:nth-child(3) .chakra-modal__content-container > section .chakra-portal .chakra-menu__menu-button').wait();
         console.log("Policy button visible");
     } catch (e) {
-        throw new Error("Error loading the settings page");
+        throw new Error("Error loading the policy button");
     }
 
     await page.locator('.chakra-portal > div:nth-child(3) .chakra-modal__content-container > section .chakra-portal .chakra-menu__menu-button').click();
     console.log("Click Policy button");
 
     try {
-        // await page.locator('#privacy-link-option-disable').wait();
         await page.locator('.chakra-portal > div:nth-child(3) .chakra-modal__content-container > section .chakra-portal > div > div > div > div .chakra-menu__menu-list button:nth-child(3)').wait();
         console.log("Button Hide from Vimeo visible");
     } catch (e) {
@@ -186,7 +187,7 @@ async function changePrivacySettings(page, lastVideo, browser) {
 async function main() {
     try {
         // process.env.MY_USERNAME, process.env.MY_PASSWORD
-        var {browser, page} = await loginToVimeo(process.env.MY_USERNAME, process.env.MY_PASSWORD);
+        var {browser, page} = await loginToVimeo("support@beautygymclub.de", "w.ZQe8:v4wB?QfY");
         const lastVideo = await getLastVideo(page);
         console.log("Logged video information");
         console.log('Last video:', lastVideo);
