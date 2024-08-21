@@ -139,6 +139,8 @@ async function changePrivacySettings(page, lastVideo, browser) {
     await page.locator('table tbody tr:first-child').click();
     // await page.waitForNavigation();
     console.log('Visited video setting page');
+    await page.reload();
+    await page.waitForNavigation();
 
     try {
         await page.locator('#header > div:nth-child(2) > div:nth-child(3) > button:first-child').wait();
