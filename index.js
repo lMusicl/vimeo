@@ -150,6 +150,14 @@ async function changePrivacySettings(page, lastVideo, browser) {
         console.log("The video settings page is loaded");
     }
 
+    try {
+        await page.locator('#header > div:nth-child(2) > div:nth-child(3) > button:first-child').wait();
+        await page.locator('#header > div:nth-child(2) > div:nth-child(3) > button:first-child').click();
+        console.log("Clicked on setting button");
+    } catch (e) {
+        throw new Error("Error loading the video settings page");
+    }
+
 
     try {
         await page.locator('.chakra-portal > div:nth-child(3) .chakra-modal__content-container > section .chakra-portal .chakra-menu__menu-button').wait();
