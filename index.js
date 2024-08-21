@@ -137,7 +137,7 @@ async function changePrivacySettings(page, lastVideo, browser) {
 
     // await page.goto('https://vimeo.com/manage/videos/' + lastVideo.url);
     await page.locator('table tbody tr:first-child').click();
-    await page.waitForNavigation();
+    // await page.waitForNavigation();
     console.log('Visited video setting page');
 
     try {
