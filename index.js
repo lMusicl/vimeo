@@ -20,8 +20,8 @@ const generateRandomUA = () => {
 }
 
 async function loginToVimeo(username, password) {
-    const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1280,800'],
-        // executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
+    const browser = await puppeteer.launch({headless: false, args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1280,800'],
+        executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
         defaultViewport: {
             width:1280,
             height:800
@@ -139,8 +139,6 @@ async function changePrivacySettings(page, lastVideo, browser) {
     await page.locator('table tbody tr:first-child').click();
     // await page.waitForNavigation();
     console.log('Visited video setting page');
-    await page.reload();
-    await page.waitForNavigation();
 
     try {
         await page.locator('#header > div:nth-child(2) > div:nth-child(3) > button:first-child').wait();
@@ -149,17 +147,11 @@ async function changePrivacySettings(page, lastVideo, browser) {
     } catch (e) {
         await page.reload();
         await page.waitForNavigation();
-        console.log("The video settings page is loaded");
-    }
-
-    try {
+        console.log("The video settings page is reloaded");
         await page.locator('#header > div:nth-child(2) > div:nth-child(3) > button:first-child').wait();
         await page.locator('#header > div:nth-child(2) > div:nth-child(3) > button:first-child').click();
         console.log("Clicked on setting button");
-    } catch (e) {
-        throw new Error("Error loading the video settings page");
     }
-
 
     try {
         await page.locator('.chakra-portal > div:nth-child(3) .chakra-modal__content-container > section .chakra-portal .chakra-menu__menu-button').wait();
@@ -197,7 +189,7 @@ async function changePrivacySettings(page, lastVideo, browser) {
 async function main() {
     try {
         // process.env.MY_USERNAME, process.env.MY_PASSWORD
-        var {browser, page} = await loginToVimeo(process.env.MY_USERNAME, process.env.MY_PASSWORD);
+        var {browser, page} = await loginToVimeo("support@beautygymclub.de", "w.ZQe8:v4wB?QfY");
         const lastVideo = await getLastVideo(page);
         console.log("Logged video information");
         console.log('Last video:', lastVideo);
