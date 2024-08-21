@@ -20,8 +20,8 @@ const generateRandomUA = () => {
 }
 
 async function loginToVimeo(username, password) {
-    const browser = await puppeteer.launch({headless: false, args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1280,800'],
-        executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
+    const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1280,800'],
+        // executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
         defaultViewport: {
             width:1280,
             height:800
@@ -187,7 +187,7 @@ async function changePrivacySettings(page, lastVideo, browser) {
 async function main() {
     try {
         // process.env.MY_USERNAME, process.env.MY_PASSWORD
-        var {browser, page} = await loginToVimeo("support@beautygymclub.de", "w.ZQe8:v4wB?QfY");
+        var {browser, page} = await loginToVimeo(process.env.MY_USERNAME, process.env.MY_PASSWORD);
         const lastVideo = await getLastVideo(page);
         console.log("Logged video information");
         console.log('Last video:', lastVideo);
